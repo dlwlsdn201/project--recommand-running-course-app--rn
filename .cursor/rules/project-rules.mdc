@@ -1,0 +1,44 @@
+# Project Rules & Architecture Guidelines
+
+당신은 최고 수준의 React Native 프론트엔드 개발자입니다. 아래의 기술 스택과 아키텍처 규칙, 코드 컨벤션을 엄격하게 준수하여 코드를 작성하십시오.
+
+## 1. Tech Stack & Environment
+- **Package Manager:** 반드시 `pnpm`만을 사용하여 의존성을 관리하고 스크립트를 실행한다. (명령어 예: `pnpm install`, `pnpm run ios`)
+- React Native (Expo Managed Workflow)
+- TypeScript (Strict Mode)
+- NativeWind (Tailwind CSS v3/v4 for RN)
+- Supabase Client SDK
+- Mapbox API / react-native-maps
+
+## 2. Architecture Pattern: Pragmatic FSD (Feature-Sliced Design)
+추후 유지보수성과 확장성을 위해 클린 아키텍처 개념을 차용한 **Feature-Sliced Design (FSD)** 기반의 디렉토리 구조를 사용한다. 코드는 도메인(Feature)별로 모듈화하여 응집도를 높인다.
+
+```text
+src/
+ ┣ app/             # App 엔트리, 전역 설정, 프로바이더, 라우팅 네비게이터
+ ┣ screens/         # 각 페이지(Screen) 컴포넌트 (UI 조합 계층)
+ ┣ features/        # 비즈니스 로직이 포함된 도메인별 모듈
+ ┃ ┣ auth/          # 카카오 로그인 등 인증 도메인
+ ┃ ┣ running/       # 러닝 트래킹, 코스 생성 도메인
+ ┃ ┗ history/       # 러닝 기록 및 다중 뷰 시각화 도메인
+ ┣ shared/          # 도메인에 종속되지 않은 공통 모듈
+ ┃ ┣ ui/            # 공통 UI 컴포넌트
+ ┃ ┣ lib/           # 공통 유틸리티 (경로 좌표 파싱, 다중 맵 컬러 제너레이터 등)
+ ┃ ┣ config/        # 환경변수, 상수(Constants) 파일
+ ┃ ┗ api/           # Supabase 클라이언트 인스턴스, API Fetcher
+```
+
+## 3. Code Conventions & Strict Rules
+1. **ES6+ 및 TypeScript:** 모든 파일은 ES6+ 문법과 TypeScript를 사용하여 작성한다. Type 및 Interface를 명확히 정의한다. (특히 GeoJSON 데이터 타입 엄격 준수)
+2. **No Magic Numbers & Hardcoding:**
+   - 반경 거리 옵션, API Timeout, 맵 줌 레벨 등의 하드코딩을 절대 금지한다.
+   - **다중 히스토리 뷰를 위한 고유 색상값:** 컴포넌트 내에 하드코딩하지 말고, `shared/lib/colorGenerator.ts`와 같은 유틸리티 함수나 명명된 색상 팔레트 배열(상수)을 통해 동적으로 할당되도록 구현하라.
+3. **추상화 및 모듈화 (Custom Hooks):**
+   - Screen 컴포넌트 안에는 복잡한 비즈니스 로직을 직접 작성하지 않는다. 반드시 Custom Hook으로 분리한다.
+   - 예: `useGenerateSafeRoute.ts` (안전 경로 생성), `useMultiHistoryMap.ts` (다중 궤적 렌더링 로직)
+4. **안전 라우팅 API 호출 규칙:**
+   - Map API를 통해 경로를 요청할 때 쿼리 파라미터에 반드시 보행자 프로필(e.g., `profile=walking`)을 적용하고, 비포장도로 제외 옵션(e.g., `exclude=unpaved`)을 명시하여야 한다.
+5. **스타일링 (NativeWind):**
+   - 인라인 스타일 객체(`style={{...}}`)의 사용을 지양하고, NativeWind의 `className`을 적극 활용하여 UI를 구성한다.
+6. **성능 최적화:**
+   - 다중 히스토리 뷰 렌더링 시 수많은 폴리라인(Polyline)과 좌표 데이터가 맵 위에 그려진다. 메모리 누수나 프레임 드랍이 발생하지 않도록 `useMemo` 등을 활용해 렌더링을 최적화하라.
