@@ -1,2 +1,2 @@
 // history types barrel export
-export {};
+export type { RunningRecord, RunningRecordWithColor } from './history.types';

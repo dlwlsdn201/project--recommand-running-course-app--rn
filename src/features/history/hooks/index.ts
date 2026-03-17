@@ -1,2 +1,3 @@
 // history hooks barrel export
-export {};
+export { useRunningHistory } from './useRunningHistory';
+export { useMultiHistoryMap } from './useMultiHistoryMap';
