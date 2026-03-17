@@ -32,5 +32,13 @@ yarn-error.*
 .env.local
 .env*.local
 
+# env files
+.env
+.env.*
+!.env.example
+
+# expo auto-generated
+expo-env.d.ts
+
 # typescript
 *.tsbuildinfo
