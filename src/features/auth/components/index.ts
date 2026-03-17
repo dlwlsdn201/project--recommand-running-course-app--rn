@@ -1,2 +1,1 @@
-// auth components barrel export
-export {};
+export { LoginView } from './LoginView';

@@ -1,2 +1,1 @@
-// auth store barrel export
-export {};
+export { useAuthStore } from './authStore';

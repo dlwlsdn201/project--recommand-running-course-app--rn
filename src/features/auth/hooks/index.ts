@@ -1,2 +1,1 @@
-// auth hooks barrel export
-export {};
+export { useKakaoAuth } from './useKakaoAuth';
