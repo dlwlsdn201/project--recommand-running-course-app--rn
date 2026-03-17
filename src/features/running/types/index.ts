@@ -1,2 +1,2 @@
 // running types barrel export
-export {};
+export type { CourseOptions, GeneratedCourse, CourseGenerationStatus } from './route.types';

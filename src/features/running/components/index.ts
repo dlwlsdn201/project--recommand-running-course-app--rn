@@ -1,2 +1,4 @@
 // running components barrel export
-export {};
+export { CourseOptionForm } from './CourseOptionForm';
+export { RunningHUD } from './RunningHUD';
+export { RunningMap } from './RunningMap';

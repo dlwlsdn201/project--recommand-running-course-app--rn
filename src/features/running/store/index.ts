@@ -1,2 +1,3 @@
 // running store barrel export
-export {};
+export { useRunningStore } from './runningStore';
+export type { RunningPhase } from './runningStore';
