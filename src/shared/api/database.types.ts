@@ -3,7 +3,7 @@
 
 export interface GeoJSONLineString {
   type: 'LineString';
-  coordinates: [number, number][]; // [lng, lat] - GeoJSON 표준
+  coordinates: ([number, number] | [number, number, number])[]; // [lng, lat] 또는 [lng, lat, elevation]
 }
 
 export interface GeoJSONPoint {

@@ -12,6 +12,7 @@ export interface GeneratedCourse {
   routeGeojson: GeoJSONLineString;
   totalDistanceMeters: number;
   estimatedDurationSeconds: number;
+  elevationGainMeters: number;
   waypoints: [number, number][]; // [lng, lat]
 }
 

@@ -69,6 +69,11 @@ export default function HomeScreen() {
             <Text className="text-gray-400">
               예상 시간: {Math.round(course.estimatedDurationSeconds / 60)}분
             </Text>
+            {course.elevationGainMeters > 0 && (
+              <Text className="text-gray-400">
+                고도 상승: {course.elevationGainMeters}m
+              </Text>
+            )}
             <CoursePreviewMap course={course} />
             <View className="gap-2 mt-4">
               <Button label="이 코스로 달리기" onPress={handleAccept} />

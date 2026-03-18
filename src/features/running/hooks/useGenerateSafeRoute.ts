@@ -7,6 +7,7 @@ import {
   MAPBOX_ROUTING_EXCLUDE,
   API_TIMEOUT_MS,
 } from '@/shared/config/constants';
+import { calcElevationGainMeters } from '@/shared/lib/routeParser';
 import type { CourseOptions, GeneratedCourse } from '../types/route.types';
 import type { GeoJSONLineString } from '@/shared/api/database.types';
 
@@ -54,6 +55,7 @@ async function fetchSafeRoute(options: CourseOptions): Promise<GeneratedCourse> 
   url.searchParams.set('overview', 'full');
   url.searchParams.set('exclude', MAPBOX_ROUTING_EXCLUDE);
   url.searchParams.set('annotations', 'distance,duration');
+  url.searchParams.set('elevation', 'true');
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
@@ -77,6 +79,7 @@ async function fetchSafeRoute(options: CourseOptions): Promise<GeneratedCourse> 
       routeGeojson: route.geometry,
       totalDistanceMeters: route.distance,
       estimatedDurationSeconds: route.duration,
+      elevationGainMeters: calcElevationGainMeters(route.geometry),
       waypoints,
     };
   } finally {

@@ -19,6 +19,24 @@ export function geojsonToLatLngArray(geojson: GeoJSONLineString): LatLng[] {
 }
 
 /**
+ * GeoJSON LineString 좌표의 고도 데이터(z값)로부터 누적 상승 고도 계산 (미터 단위)
+ * 3D 좌표 [lng, lat, elevation]가 없으면 0 반환
+ */
+export function calcElevationGainMeters(geojson: GeoJSONLineString): number {
+  let gain = 0;
+  const coords = geojson.coordinates;
+  for (let i = 1; i < coords.length; i++) {
+    const prevElev = coords[i - 1][2];
+    const currElev = coords[i][2];
+    if (prevElev !== undefined && currElev !== undefined) {
+      const diff = currElev - prevElev;
+      if (diff > 0) gain += diff;
+    }
+  }
+  return Math.round(gain);
+}
+
+/**
  * LatLng 배열 → GeoJSON LineString 변환
  */
 export function latLngArrayToGeojson(coords: LatLng[]): GeoJSONLineString {
