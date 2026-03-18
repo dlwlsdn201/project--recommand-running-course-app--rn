@@ -1,6 +1,7 @@
-// app/(main)/history.tsx
+// app/(main)/history/index.tsx
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import { SafeAreaWrapper, LoadingSpinner, Button } from '@/shared/ui';
 import { HistoryListItem } from '@/features/history/components/HistoryListItem';
 import { MultiHistoryMap } from '@/features/history/components/MultiHistoryMap';
@@ -8,6 +9,7 @@ import { useRunningHistory } from '@/features/history/hooks/useRunningHistory';
 import { useMultiHistoryMap } from '@/features/history/hooks/useMultiHistoryMap';
 
 export default function HistoryScreen() {
+  const router = useRouter();
   const { data: records = [], isLoading } = useRunningHistory();
   const [isMultiMode, setIsMultiMode] = useState(false);
   const { selectedIds, toggleRecord, selectAll, clearAll, selectedRoutes, colorMap } =
@@ -65,6 +67,7 @@ export default function HistoryScreen() {
                 record={item}
                 isSelected={isMultiMode ? selectedIds.has(item.id) : undefined}
                 color={isMultiMode ? colorMap.get(item.id) : undefined}
+                onPress={!isMultiMode ? () => router.push(`/(main)/history/${item.id}`) : undefined}
                 onToggleSelect={isMultiMode ? () => toggleRecord(item.id) : undefined}
               />
             )}

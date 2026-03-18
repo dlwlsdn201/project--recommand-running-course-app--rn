@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import * as Location from 'expo-location';
 import { SafeAreaWrapper, Button, Card } from '@/shared/ui';
 import { CourseOptionForm } from '@/features/running/components/CourseOptionForm';
+import { CoursePreviewMap } from '@/features/running/components/CoursePreviewMap';
 import { useGenerateSafeRoute } from '@/features/running/hooks/useGenerateSafeRoute';
 import { useRunningStore } from '@/features/running/store/runningStore';
 import type { RadiusOption } from '@/shared/config/constants';
@@ -65,10 +66,11 @@ export default function HomeScreen() {
             <Text className="text-gray-400">
               거리: {(course.totalDistanceMeters / 1000).toFixed(2)}km
             </Text>
-            <Text className="text-gray-400 mb-4">
+            <Text className="text-gray-400">
               예상 시간: {Math.round(course.estimatedDurationSeconds / 60)}분
             </Text>
-            <View className="gap-2">
+            <CoursePreviewMap course={course} />
+            <View className="gap-2 mt-4">
               <Button label="이 코스로 달리기" onPress={handleAccept} />
               <Button
                 label="다시 생성하기"

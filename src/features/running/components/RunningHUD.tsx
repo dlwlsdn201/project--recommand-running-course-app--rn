@@ -8,6 +8,7 @@ interface RunningHUDProps {
   elapsedSeconds: number;
   distanceMeters: number;
   paceSecPerKm: number;
+  phase: 'running' | 'paused';
   onStop: () => void;
   onPause: () => void;
 }
@@ -16,6 +17,7 @@ export function RunningHUD({
   elapsedSeconds,
   distanceMeters,
   paceSecPerKm,
+  phase,
   onStop,
   onPause,
 }: RunningHUDProps) {
@@ -43,10 +45,17 @@ export function RunningHUD({
       </View>
 
       {/* 컨트롤 버튼 */}
-      <View className="flex-row gap-3">
-        <Button label="일시정지" onPress={onPause} variant="secondary" className="flex-1" />
-        <Button label="종료" onPress={onStop} className="flex-1 bg-red-600" />
-      </View>
+      {phase === 'paused' ? (
+        <View className="flex-row gap-3">
+          <Button label="재개" onPress={onPause} className="flex-1" />
+          <Button label="종료" onPress={onStop} className="flex-1 bg-red-600" />
+        </View>
+      ) : (
+        <View className="flex-row gap-3">
+          <Button label="일시정지" onPress={onPause} variant="secondary" className="flex-1" />
+          <Button label="종료" onPress={onStop} className="flex-1 bg-red-600" />
+        </View>
+      )}
     </View>
   );
 }

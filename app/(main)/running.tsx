@@ -20,6 +20,7 @@ export default function RunningScreen() {
     startTracking,
     stopTracking,
     pauseTracking,
+    resumeTracking,
     reset,
   } = useRunningTracker();
   const saveRecord = useSaveRunningRecord();
@@ -128,8 +129,9 @@ export default function RunningScreen() {
         elapsedSeconds={elapsedSeconds}
         distanceMeters={distanceMeters}
         paceSecPerKm={currentPaceSecPerKm}
+        phase={phase === 'paused' ? 'paused' : 'running'}
         onStop={handleStop}
-        onPause={phase === 'running' ? pauseTracking : handleStart}
+        onPause={phase === 'running' ? pauseTracking : resumeTracking}
       />
     </View>
   );
