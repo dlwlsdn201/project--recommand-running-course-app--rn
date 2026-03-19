@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { supabase } from '@/shared/api/supabase';
 import { useAuthStore } from '@/features/auth/store/authStore';
-import { Providers } from '@/app/Providers';
+import { Providers } from '@/providers/AppProviders';
 import '@/global.css';
 
 export default function RootLayout() {
