@@ -26,6 +26,9 @@ npm-debug.*
 yarn-debug.*
 yarn-error.*
 
+# Cursor IDE
+.cursor/debug-*.log
+
 # macOS
 .DS_Store
 *.pem

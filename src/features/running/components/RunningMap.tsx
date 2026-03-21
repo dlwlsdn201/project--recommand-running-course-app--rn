@@ -1,7 +1,7 @@
 // src/features/running/components/RunningMap.tsx
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Polyline, Marker } from 'react-native-maps';
 import { geojsonToLatLngArray } from '@/shared/lib/routeParser';
 import type { LatLng } from '@/shared/lib/routeParser';
 import type { GeneratedCourse } from '../types/route.types';
@@ -31,7 +31,6 @@ export function RunningMap({ plannedCourse, trackedCoords, currentLocation }: Ru
     <View className="flex-1">
       <MapView
         className="flex-1"
-        provider={PROVIDER_GOOGLE}
         initialRegion={initialRegion}
         showsUserLocation
         followsUserLocation

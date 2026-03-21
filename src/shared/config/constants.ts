@@ -25,9 +25,9 @@ export const MAP_DEFAULT_LATITUDE_DELTA = 0.01;
 export const MAP_DEFAULT_LONGITUDE_DELTA = 0.01;
 
 // ─── Mapbox safe routing settings (PRD required) ────────────────────────────
-// Must use pedestrian profile and exclude unpaved roads
+// Must use pedestrian profile; walking profile valid excludes: ferry, motorway, toll
 export const MAPBOX_ROUTING_PROFILE = 'walking' as const;
-export const MAPBOX_ROUTING_EXCLUDE = 'unpaved' as const;
+export const MAPBOX_ROUTING_EXCLUDE = 'ferry' as const;
 export const MAPBOX_ROUTING_GEOMETRIES = 'geojson' as const;
 export const MAPBOX_ROUTING_OVERVIEW = 'full' as const;
 
