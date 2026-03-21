@@ -1,5 +1,5 @@
 // app/(main)/running.tsx
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaWrapper, Button, LoadingSpinner } from '@/shared/ui';
@@ -25,15 +25,17 @@ export default function RunningScreen() {
   } = useRunningTracker();
   const saveRecord = useSaveRunningRecord();
 
-  const currentLocation = trackedCoords.length > 0 ? trackedCoords[trackedCoords.length - 1] : null;
-
-  const handleStart = useCallback(async () => {
-    try {
-      await startTracking();
-    } catch (e) {
+  // 화면 진입 시 즉시 트래킹 시작
+  useEffect(() => {
+    if (phase !== 'idle' || !plannedCourse) return;
+    startTracking().catch((e) => {
       Alert.alert('오류', e instanceof Error ? e.message : '트래킹을 시작할 수 없습니다.');
-    }
-  }, [startTracking]);
+      router.back();
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 마운트 시 1회만 실행
+
+  const currentLocation = trackedCoords.length > 0 ? trackedCoords[trackedCoords.length - 1] : null;
 
   const handleStop = useCallback(() => {
     Alert.alert('러닝 종료', '러닝을 종료하고 기록을 저장할까요?', [
@@ -82,26 +84,6 @@ export default function RunningScreen() {
             코스를 먼저 생성해주세요.
           </Text>
           <Button label="코스 생성으로 이동" onPress={() => router.push('/(main)')} />
-        </View>
-      </SafeAreaWrapper>
-    );
-  }
-
-  if (phase === 'idle' || phase === 'ready') {
-    return (
-      <SafeAreaWrapper>
-        <View className="flex-1 items-center justify-center px-6">
-          <Text className="text-white text-2xl font-black mb-2">준비됐나요?</Text>
-          <Text className="text-gray-400 text-sm mb-8 text-center">
-            목표: {(plannedCourse.totalDistanceMeters / 1000).toFixed(1)}km
-          </Text>
-          <Button label="달리기 시작" onPress={handleStart} className="w-full" />
-          <Button
-            label="뒤로"
-            onPress={() => router.back()}
-            variant="ghost"
-            className="w-full mt-3"
-          />
         </View>
       </SafeAreaWrapper>
     );
