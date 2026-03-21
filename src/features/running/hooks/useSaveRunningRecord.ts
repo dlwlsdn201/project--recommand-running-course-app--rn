@@ -27,6 +27,13 @@ export function useSaveRunningRecord() {
           ? Math.round(payload.elapsedSeconds / (payload.distanceMeters / 1000))
           : null;
 
+      // profiles 행이 없을 경우(트리거 실행 전 가입 유저) 자동 생성
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase as any).from('profiles').upsert(
+        { id: user.id },
+        { onConflict: 'id', ignoreDuplicates: true }
+      );
+
       // Use 'as any' to work around the gap between our hand-written Database type
       // and the strict generic types expected by @supabase/supabase-js v2.99.
       // The actual insert payload is structurally correct with the Supabase schema.
@@ -46,7 +53,7 @@ export function useSaveRunningRecord() {
     },
     onSuccess: () => {
       // 히스토리 캐시 무효화
-      queryClient.invalidateQueries({ queryKey: ['running-history'] });
+      queryClient.invalidateQueries({ queryKey: ['running-history'], exact: false });
     },
   });
 }

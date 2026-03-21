@@ -84,7 +84,11 @@ export default function RunningScreen() {
             );
           } else {
             reset();
-            router.back();
+            Alert.alert(
+              "기록 없음",
+              "달린 거리가 부족해 기록이 저장되지 않았습니다.",
+              [{ text: "확인", onPress: () => router.push("/(main)/history") }],
+            );
           }
         },
       },
