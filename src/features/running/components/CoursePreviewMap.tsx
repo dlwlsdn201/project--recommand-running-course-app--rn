@@ -1,9 +1,9 @@
 // src/features/running/components/CoursePreviewMap.tsx
-import React, { useMemo, useRef, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import MapView, { Polyline, Marker, Region } from 'react-native-maps';
-import { geojsonToLatLngArray } from '@/shared/lib/routeParser';
-import type { GeneratedCourse } from '../types/route.types';
+import React, { useMemo, useRef, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import MapView, { Polyline, Marker, Region } from "react-native-maps";
+import { geojsonToLatLngArray } from "@/shared/lib/routeParser";
+import type { GeneratedCourse } from "../types/route.types";
 
 interface CoursePreviewMapProps {
   course: GeneratedCourse;
@@ -13,10 +13,10 @@ const BUTTON_STYLE = {
   width: 40,
   height: 40,
   borderRadius: 20,
-  backgroundColor: 'white',
-  alignItems: 'center' as const,
-  justifyContent: 'center' as const,
-  shadowColor: '#000',
+  backgroundColor: "white",
+  alignItems: "center" as const,
+  justifyContent: "center" as const,
+  shadowColor: "#000",
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.25,
   shadowRadius: 4,
@@ -25,7 +25,10 @@ const BUTTON_STYLE = {
 
 export function CoursePreviewMap({ course }: CoursePreviewMapProps) {
   const mapRef = useRef<MapView>(null);
-  const coords = useMemo(() => geojsonToLatLngArray(course.routeGeojson), [course]);
+  const coords = useMemo(
+    () => geojsonToLatLngArray(course.routeGeojson),
+    [course],
+  );
 
   const initialRegion = useMemo<Region | undefined>(() => {
     if (coords.length === 0) return undefined;
@@ -52,7 +55,10 @@ export function CoursePreviewMap({ course }: CoursePreviewMapProps) {
     ? { latitude: initialRegion.latitude, longitude: initialRegion.longitude }
     : { latitude: 37.5665, longitude: 126.978 };
 
-  const animateTo = (nextDelta: { latitudeDelta: number; longitudeDelta: number }) => {
+  const animateTo = (nextDelta: {
+    latitudeDelta: number;
+    longitudeDelta: number;
+  }) => {
     const region: Region = { ...center, ...nextDelta };
     mapRef.current?.animateToRegion(region, 300);
   };
@@ -78,7 +84,13 @@ export function CoursePreviewMap({ course }: CoursePreviewMapProps) {
   if (coords.length === 0) return null;
 
   return (
-    <View style={{ height: 300, borderRadius: 16, overflow: 'hidden', marginTop: 12 }}>
+    <View
+      style={{
+        height: 300,
+        borderRadius: 16,
+        overflow: "hidden",
+        marginTop: 12,
+      }}>
       <MapView
         ref={mapRef}
         style={{ flex: 1 }}
@@ -86,19 +98,22 @@ export function CoursePreviewMap({ course }: CoursePreviewMapProps) {
         scrollEnabled
         zoomEnabled
         rotateEnabled
-        pitchEnabled={false}
-      >
-        <Polyline coordinates={coords} strokeColor="#22c55e" strokeWidth={4} />
-        <Marker coordinate={coords[0]} title="출발/도착" pinColor="#22c55e" />
+        pitchEnabled={false}>
+        <Polyline coordinates={coords} strokeColor='#22c55e' strokeWidth={4} />
+        <Marker coordinate={coords[0]} title='출발/도착' pinColor='#22c55e' />
       </MapView>
 
       {/* 줌 버튼 */}
-      <View style={{ position: 'absolute', bottom: 10, right: 10, gap: 8 }}>
+      <View style={{ position: "absolute", bottom: 10, right: 10, gap: 8 }}>
         <TouchableOpacity onPress={handleZoomIn} style={BUTTON_STYLE}>
-          <Text style={{ fontSize: 20, color: '#374151', lineHeight: 22 }}>+</Text>
+          <Text style={{ fontSize: 20, color: "#374151", lineHeight: 22 }}>
+            +
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleZoomOut} style={BUTTON_STYLE}>
-          <Text style={{ fontSize: 20, color: '#374151', lineHeight: 22 }}>−</Text>
+          <Text style={{ fontSize: 20, color: "#374151", lineHeight: 22 }}>
+            −
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
