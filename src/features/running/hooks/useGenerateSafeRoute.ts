@@ -121,7 +121,8 @@ async function fetchSafeRoute(options: CourseOptions): Promise<GeneratedCourse> 
       if (diff <= TOLERANCE_METERS) break;
 
       // 비례 스케일링: distance ∝ radius 가정 → 1-2회 내 수렴
-      radius *= targetMeters / route.distance;
+      // 사용자 선택 반경(radiusMeters)을 초과하지 않도록 캡핑
+      radius = Math.min(radius * (targetMeters / route.distance), radiusMeters);
     }
 
     if (!bestRoute) throw new Error('경로를 생성할 수 없습니다.');
