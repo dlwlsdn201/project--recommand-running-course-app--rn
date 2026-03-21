@@ -36,13 +36,30 @@ export function useKakaoAuth() {
 
       if (result.type === 'success') {
         const url = new URL(result.url);
+
+        // PKCE flow: ?code=
         const code = url.searchParams.get('code');
         if (code) {
           const { data: sessionData, error: sessionError } =
             await supabase.auth.exchangeCodeForSession(code);
           if (sessionError) throw sessionError;
           setSession(sessionData.session);
+          return;
         }
+
+        // Implicit flow: #access_token=
+        const hashParams = new URLSearchParams(url.hash.replace('#', ''));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+        if (accessToken && refreshToken) {
+          const { data: sessionData, error: sessionError } =
+            await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+          if (sessionError) throw sessionError;
+          setSession(sessionData.session);
+          return;
+        }
+
+        throw new Error('인증 토큰을 받지 못했습니다.');
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : '로그인 중 오류가 발생했습니다.');
